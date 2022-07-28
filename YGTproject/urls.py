@@ -13,4 +13,6 @@ urlpatterns = [
 
     #세부 페이지
     path('detail/<int:post_id>', views.detail, name='detail'),
+
+    path('new_comment/<int:post_id>', views.new_comment, name='new_comment'),
 ]
