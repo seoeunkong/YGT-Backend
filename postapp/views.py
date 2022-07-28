@@ -16,6 +16,7 @@ def postcreate(request):
         if form.is_valid():
             unfinished = form.save(commit=False)
             unfinished.author = request.user
+            unfinished.author_profile = get_object_or_404(Profile, pk=request.user.id)
             unfinished.save()
             return redirect("home")
 

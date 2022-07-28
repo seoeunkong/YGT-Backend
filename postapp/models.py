@@ -9,12 +9,8 @@ class Post(models.Model):
     body = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User,on_delete=models.CASCADE)
-    #게시글 작성자 학교
-    author_school = models.ForeignKey("Profile", null =True, blank=True, on_delete=models.CASCADE)
-    # #게시글 작성자 학과
-    # author_department = models.ForeignKey(UserModel, null =True, blank=True, on_delete=models.CASCADE)
-    # #게시글 작성자 학번
-    # author_id = models.ForeignKey(UserModel, null =True, blank=True, on_delete=models.CASCADE)
+    #게시글 작성자 학교,학과,학번
+    author_profile = models.ForeignKey("Profile", null =True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -24,7 +20,7 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, null =True, blank=True, on_delete=models.CASCADE)
     writer = models.ForeignKey(User,on_delete=models.CASCADE)
-    # #댓글 작성자 학교,학과,학번
+    #댓글 작성자 학교,학과,학번
     writer_profile = models.ForeignKey("Profile", null =True, blank=True, on_delete=models.CASCADE)
     
     def __str__(self):
