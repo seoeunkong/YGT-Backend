@@ -8,7 +8,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User,on_delete=models.CASCADE)
+    #author = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     # #게시글 작성자 학교
     # author_school = models.ForeignKey(UserModel, null =True, blank=True, on_delete=models.CASCADE)
     # #게시글 작성자 학과
@@ -23,7 +23,7 @@ class Comment(models.Model):
     comment = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, null =True, blank=True, on_delete=models.CASCADE)
-    writer = models.ForeignKey(User,on_delete=models.CASCADE)
+    #writer = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     # #댓글 작성자 학교
     # writer_school = models.ForeignKey(UserModel, null =True, blank=True, on_delete=models.CASCADE)
     # #댓글 작성자 학과
@@ -35,5 +35,13 @@ class Comment(models.Model):
         return self.comment
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    school = models.CharField(max_length=30, blank=True)
+    school_id = models.CharField(max_length=30, blank=True)
+    department = models.CharField(max_length=30, blank=True)
+
+    def __str__(self):
+        return self.user
 
 
