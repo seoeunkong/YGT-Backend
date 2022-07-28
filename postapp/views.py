@@ -1,6 +1,7 @@
+from xml.etree.ElementTree import Comment
 from django.shortcuts import render,redirect,get_object_or_404
 from .forms import CommentForm, PostForm
-from .models import Post
+from .models import Post, Profile,Comment
 
 def home(request):
     #posts = Post.objects.all()
@@ -36,5 +37,6 @@ def new_comment(request,post_id):
         finished_form = filled_form.save(commit=False)
         finished_form.writer = request.user
         finished_form.post = get_object_or_404(Post, pk=post_id)
+        finished_form.writer_profile = get_object_or_404(Profile, pk=request.user.id)
         finished_form.save()
     return redirect('detail',post_id)
