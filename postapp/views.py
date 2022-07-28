@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .forms import PostForm
 
 def home(request):
@@ -6,9 +6,12 @@ def home(request):
 
 def postcreate(request):
     #request method가 POST일 경우
-    if request.method == "POST":
+    if request.method == "POST" or request.method == "FILES":
          #입력값 저장
-        pass
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
 
     #request method가 GET일 경우
     else:
