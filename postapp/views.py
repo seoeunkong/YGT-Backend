@@ -13,7 +13,9 @@ def postcreate(request):
          #입력값 저장
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            unfinished = form.save(commit=False)
+            unfinished.author = request.user
+            unfinished.save()
             return redirect("home")
 
     #request method가 GET일 경우
@@ -32,6 +34,7 @@ def new_comment(request,post_id):
     filled_form = CommentForm(request.POST)
     if filled_form.is_valid():
         finished_form = filled_form.save(commit=False)
+        finished_form.writer = request.user
         finished_form.post = get_object_or_404(Post, pk=post_id)
         finished_form.save()
     return redirect('detail',post_id)
