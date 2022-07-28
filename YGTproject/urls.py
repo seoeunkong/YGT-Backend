@@ -10,4 +10,7 @@ urlpatterns = [
 
     #게시글 작성
     path('postcreate', views.postcreate, name='postcreate'),
+
+    #세부 페이지
+    path('detail/<int:post_id>', views.detail, name='detail'),
 ]
