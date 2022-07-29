@@ -1,3 +1,4 @@
+import profile
 from xml.etree.ElementTree import Comment
 from django.shortcuts import render,redirect,get_object_or_404
 from .forms import CommentForm, PostForm
@@ -28,8 +29,9 @@ def postcreate(request):
 
 def detail(request,post_id):
     post_detail = get_object_or_404(Post, pk=post_id)
+    profile_detail = get_object_or_404(Profile, pk=request.user.id)
     comment_form = CommentForm()
-    return render(request, "detail.html",{"post_detail":post_detail,"comment_form":comment_form})
+    return render(request, "detail.html",{"post_detail":post_detail,"comment_form":comment_form,"profile":profile_detail})
 
 #댓글 저장
 def new_comment(request,post_id):
@@ -41,3 +43,21 @@ def new_comment(request,post_id):
         finished_form.writer_profile = get_object_or_404(Profile, pk=request.user.id)
         finished_form.save()
     return redirect('detail',post_id)
+
+#좋아요
+def post_like(request,post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    if profile.like_post.filter(id=post_id).exists():
+        profile.like_post.remove(post)
+        post.like_count -= 1
+        post.save()
+    else:
+        profile.like_post.add(post)
+        post.like_count += 1
+
+        post.save()
+    return redirect("detail",post_id)
+
+

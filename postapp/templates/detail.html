@@ -5,7 +5,28 @@
 
 <h3>
     {{ post_detail.body}}
+    <p>좋아요 수 :{{post_detail.like_count}}</p>
+    <!--
+    <a href="{%url 'post_like' post_detail.id %}">
+        {% if post_detail in profile.like_post.all %}
+        취소
+        {% else %}
+        좋아요
+        {% endif %}
+    </a>-->
+    <div>
+        <form action="{% url 'post_like' post_detail.id %}" method='POST'>
+          {% csrf_token %}
+          {% if post_detail in profile.like_post.all %}
+            <input type="submit" value='좋아요 취소'>
+          {% else %}
+            <input type="submit" value='좋아요'>
+          {% endif %}
+        </form>
+      </div>
+
 </h3>
+
 <hr>
 <!--댓글 목록 공간-->
 {% for comment in post_detail.comment_set.all %}

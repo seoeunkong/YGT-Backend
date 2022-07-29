@@ -1,4 +1,5 @@
 from operator import mod
+import profile
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -11,6 +12,8 @@ class Post(models.Model):
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     #게시글 작성자 학교,학과,학번
     author_profile = models.ForeignKey("Profile", null =True, blank=True, on_delete=models.CASCADE)
+
+    like_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -32,6 +35,8 @@ class Profile(models.Model):
     school = models.CharField(max_length=30, blank=True)
     school_id = models.CharField(max_length=30, blank=True)
     department = models.CharField(max_length=30, blank=True)
+
+    like_post = models.ManyToManyField(Post, blank=True,related_name='like_users')
 
     def __str__(self):
         return self.school + " "+self.school_id+" "+self.department
