@@ -3,12 +3,16 @@ from xml.etree.ElementTree import Comment
 from django.shortcuts import render,redirect,get_object_or_404
 from .forms import CommentForm, PostForm
 from .models import Post, Profile,Comment
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from .serializers import PostSerializer,CommentSerializer,ProfileSerializer
+from rest_framework.response import Response
 
 def home(request):
     #posts = Post.objects.all()
     posts = Post.objects.filter().order_by("-date")
     return render(request,'index.html',{"posts":posts})
 
+#게시글 작성
 def postcreate(request):
     #request method가 POST일 경우
     if request.method == "POST" or request.method == "FILES":
@@ -27,6 +31,7 @@ def postcreate(request):
      #form 입력 html 띄우기
     return render(request,"post_form.html",{"form":form})
 
+#세부 페이지
 def detail(request,post_id):
     post_detail = get_object_or_404(Post, pk=post_id)
     profile_detail = get_object_or_404(Profile, pk=request.user.id)
@@ -60,22 +65,7 @@ def post_like(request,post_id):
         post.save()
     return redirect("detail",post_id)
 
-#좋아요 게시글
-# def comment_like(request,comment_id):
-#     comment = get_object_or_404(Comment, pk=comment_id)
-#     user = request.user
-#     profile = Profile.objects.get(user=user)
-#     if profile.like_comment.filter(id=comment_id).exists():
-#         profile.like_comment.remove(comment)
-#         comment.like_count -= 1
-#         comment.save()
-#     else:
-#         profile.like_comment.add(comment)
-#         comment.like_count += 1
-
-#         comment.save()
-#     return redirect("detail",comment_id)
-
+#좋아요 댓글
 def comment_like(request,post_id):
     comment = Comment.objects.get(post=post_id)
     user = request.user
@@ -90,5 +80,18 @@ def comment_like(request,post_id):
 
         comment.save()
     return redirect("detail",post_id)
+
+
+class PostViewSet(ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer 
+
+class CommentViewSet(ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer 
+
+class ProfileViewSet(ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer 
 
 
