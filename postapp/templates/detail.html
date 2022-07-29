@@ -33,6 +33,15 @@
     <p> {{ comment }} </p>
     <p> {{ comment.date }} </p>
     <p> {{ comment.writer_profile }} {{ comment.writer }} </p>
+    </br>
+    <p>좋아요 수 :{{comment.like_count}}</p>
+    <a href="{% url 'comment_like' post_detail.id %}">
+      {% if comment in profile.like_comment.all %}
+      취소
+      {% else %}
+      좋아요
+      {% endif %}
+  </a>
     <hr>
 {% endfor %}
 

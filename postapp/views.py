@@ -44,7 +44,7 @@ def new_comment(request,post_id):
         finished_form.save()
     return redirect('detail',post_id)
 
-#좋아요
+#좋아요 게시글
 def post_like(request,post_id):
     post = get_object_or_404(Post, pk=post_id)
     user = request.user
@@ -58,6 +58,37 @@ def post_like(request,post_id):
         post.like_count += 1
 
         post.save()
+    return redirect("detail",post_id)
+
+#좋아요 게시글
+# def comment_like(request,comment_id):
+#     comment = get_object_or_404(Comment, pk=comment_id)
+#     user = request.user
+#     profile = Profile.objects.get(user=user)
+#     if profile.like_comment.filter(id=comment_id).exists():
+#         profile.like_comment.remove(comment)
+#         comment.like_count -= 1
+#         comment.save()
+#     else:
+#         profile.like_comment.add(comment)
+#         comment.like_count += 1
+
+#         comment.save()
+#     return redirect("detail",comment_id)
+
+def comment_like(request,post_id):
+    comment = Comment.objects.get(post=post_id)
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    if profile.like_comment.filter(id=comment.id).exists():
+        profile.like_comment.remove(comment)
+        comment.like_count -= 1
+        comment.save()
+    else:
+        profile.like_comment.add(comment)
+        comment.like_count += 1
+
+        comment.save()
     return redirect("detail",post_id)
 
 
